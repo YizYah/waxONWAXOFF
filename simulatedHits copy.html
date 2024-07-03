@@ -67,57 +67,53 @@
       <input type="number" id="maxTimeInput" value="4" />
     </div>
     <script>
-      // Assuming the existence of a function to update position text and variables for current horizontal and vertical positions
-      function updatePositionText(horizontalPosition, verticalPosition) {
-        let positionText = '';
-
-        // Check if the position is within the inner bounds
-        if (
-          horizontalPosition >= LEFT_INNER &&
-          horizontalPosition <= RIGHT_INNER &&
-          verticalPosition >= BOTTOM_INNER &&
-          verticalPosition <= TOP_INNER
-        ) {
-          positionText = 'inner';
+      function displayPositionText(positionText) {
+        // Find the element that will display the position text
+        const positionDisplayElement = document.getElementById('positionText');
+        if (positionDisplayElement) {
+          // Set the text content of the element
+          positionDisplayElement.textContent = positionText;
+          // Ensure the element is visible
+          positionDisplayElement.style.display = 'block';
         } else {
-          // Determine the vertical position text
-          if (verticalPosition > UPPER) {
-            positionText = 'upper outer';
-          } else if (verticalPosition > HIGH && verticalPosition <= UPPER) {
-            positionText = 'high outer';
-          } else if (verticalPosition >= LOW && verticalPosition <= HIGH) {
-            positionText = 'low outer';
-          } else if (verticalPosition < LOW) {
-            positionText = 'bottom outer';
-          }
-
-          // Append " left" or "right" based on the horizontal position
-          if (horizontalPosition < LEFT_INNER) {
-            positionText += ' left';
-          } else if (horizontalPosition > RIGHT_INNER) {
-            positionText += ' right';
-          }
+          console.error('Position display element not found');
         }
-
-        // Assuming a function exists to actually update the position text on the page or console
-        console.log(positionText); // Replace this with the actual function to update the position text
       }
+      // // Assuming the existence of a function to update position text and variables for current horizontal and vertical positions
+      // function updatePositionText(horizontalPosition, verticalPosition) {
+      //   let positionText = '';
 
-      function displayPositionText(position) {
-        const textElement = document.createElement('div');
-        textElement.classList.add('text-display');
-        textElement.textContent = position;
-        document.body.appendChild(textElement);
+      //   // Check if the position is within the inner bounds
+      //   if (
+      //     horizontalPosition >= LEFT_INNER &&
+      //     horizontalPosition <= RIGHT_INNER &&
+      //     verticalPosition >= BOTTOM_INNER &&
+      //     verticalPosition <= TOP_INNER
+      //   ) {
+      //     positionText = 'inner';
+      //   } else {
+      //     // Determine the vertical position text
+      //     if (verticalPosition > UPPER) {
+      //       positionText = 'upper outer';
+      //     } else if (verticalPosition > HIGH && verticalPosition <= UPPER) {
+      //       positionText = 'high outer';
+      //     } else if (verticalPosition >= LOW && verticalPosition <= HIGH) {
+      //       positionText = 'low outer';
+      //     } else if (verticalPosition < LOW) {
+      //       positionText = 'bottom outer';
+      //     }
 
-        // Show the text
-        textElement.style.display = 'block';
+      //     // Append " left" or "right" based on the horizontal position
+      //     if (horizontalPosition < LEFT_INNER) {
+      //       positionText += ' left';
+      //     } else if (horizontalPosition > RIGHT_INNER) {
+      //       positionText += ' right';
+      //     }
+      //   }
 
-        // Hide the text after 1 second
-        setTimeout(() => {
-          textElement.style.display = 'none';
-          document.body.removeChild(textElement);
-        }, 1000);
-      }
+      //   // Assuming a function exists to actually update the position text on the page or console
+      //   console.log(positionText); // Replace this with the actual function to update the position text
+      // }
 
       const square = document.querySelector('.red-square');
 
@@ -168,46 +164,53 @@
           const squareRect = square.getBoundingClientRect();
           let positionText = '';
 
+          console.log(
+            `squareRect.left: ${squareRect.left}, squareRect.top: ${squareRect.top}`
+          );
           if (
-            squareRect.left >= leftInnerThreshold &&
-            squareRect.left <= rightInnerThreshold &&
-            squareRect.top >= bottomInnerThreshold &&
-            squareRect.top <= topInnerThreshold
+            squareRect.left >= LEFT_INNER &&
+            squareRect.left <= RIGHT_INNER &&
+            squareRect.top >= BOTTOM_INNER &&
+            squareRect.top <= TOP_INNER
           ) {
-            positionText = 'inner';
-          } else {
-            // Determine the vertical position text based on thresholds
-            if (squareRect.top < bottomThreshold) {
-              positionText = 'bottom outer';
-            } else if (
-              squareRect.top >= bottomThreshold &&
-              squareRect.top < lowThreshold
+            // Check if the position is within the inner bounds
+            if (
+              squareRect.left >= leftInnerThreshold &&
+              squareRect.left <= rightInnerThreshold &&
+              squareRect.top >= bottomInnerThreshold &&
+              squareRect.top <= topInnerThreshold
             ) {
-              positionText = 'low outer';
-            } else if (
-              squareRect.top >= lowThreshold &&
-              squareRect.top < highThreshold
-            ) {
-              positionText = 'low outer';
-            } else if (
-              squareRect.top >= highThreshold &&
-              squareRect.top < upperThreshold
-            ) {
-              positionText = 'high outer';
-            } else if (squareRect.top >= upperThreshold) {
-              positionText = 'upper outer';
-            }
-          }
-          // if (squareRect.top < window.innerHeight * 0.55) {
-          //   positionText += "upper ";
-          // } else {
-          //   positionText += "lower ";
-          // }
+              positionText = 'inner';
+            } else {
+              // Determine the vertical position text based on thresholds
+              if (squareRect.top < bottomThreshold) {
+                positionText = 'bottom outer';
+              } else if (
+                squareRect.top >= bottomThreshold &&
+                squareRect.top < lowThreshold
+              ) {
+                positionText = 'low outer';
+              } else if (
+                squareRect.top >= lowThreshold &&
+                squareRect.top < highThreshold
+              ) {
+                positionText = 'low outer';
+              } else if (
+                squareRect.top >= highThreshold &&
+                squareRect.top < upperThreshold
+              ) {
+                positionText = 'high outer';
+              } else if (squareRect.top >= upperThreshold) {
+                positionText = 'upper outer';
+              }
 
-          if (squareRect.left < window.innerWidth / 2) {
-            positionText += ' left';
-          } else {
-            positionText += ' right';
+              // Append " left" or "right" based on the horizontal position
+              if (squareRect.left < leftInnerThreshold) {
+                positionText += ' left';
+              } else if (squareRect.left > rightInnerThreshold) {
+                positionText += ' right';
+              }
+            }
           }
 
           displayPositionText(positionText);
