@@ -14,8 +14,9 @@
         height: 100vh;
         background-color: #282c34; /* Dark background */
         background-image: url('./adversary2.svg'); /* Add background image */
-        background-size: cover; /* Cover the entire page */
+        background-size: contain; /* Ensure the entire image fits within the available space */
         background-position: center; /* Center the background image */
+        background-repeat: no-repeat; /* Prevent the image from repeating */
       }
       .input-container {
         position: fixed;
@@ -138,26 +139,26 @@
         square.classList.remove('grow-and-fade'); // Reset the animation
 
         setTimeout(() => {
-          // height
-          const BOTTOM = 10;
-          const LOW = 25;
-          const HIGH = 50;
-          const UPPER = 75;
-          const TOP_INNER = 40;
-          const BOTTOM_INNER = 10;
+          // height - Reversed meanings
+          const TOP = 10; // Was BOTTOM, now represents the topmost part
+          const UPPER = 25; // Was LOW, now represents the upper middle part
+          const LOWER = 50; // Was HIGH, now represents the lower middle part
+          const BOTTOM = 75; // Was UPPER, now represents the bottommost part
+          const TOP_INNER = 60; // Adjusted to represent an inner upper threshold
+          const BOTTOM_INNER = 90; // Adjusted to represent an inner bottom threshold
 
           // width
           const LEFT_INNER = 30;
           const RIGHT_INNER = 70;
 
           // Calculate actual pixel values based on percentages of the screen dimensions
-          const bottomThreshold = window.innerHeight * (BOTTOM / 100);
-          const lowThreshold = window.innerHeight * (LOW / 100);
-          const highThreshold = window.innerHeight * (HIGH / 100);
-          const upperThreshold = window.innerHeight * (UPPER / 100);
-          const topInnerThreshold = window.innerHeight * (TOP_INNER / 100);
+          const topThreshold = window.innerHeight * (TOP / 100); // Now top
+          const upperThreshold = window.innerHeight * (UPPER / 100); // Now upper
+          const lowerThreshold = window.innerHeight * (LOWER / 100); // Now lower
+          const bottomThreshold = window.innerHeight * (BOTTOM / 100); // Now bottom
+          const topInnerThreshold = window.innerHeight * (TOP_INNER / 100); // Adjusted
           const bottomInnerThreshold =
-            window.innerHeight * (BOTTOM_INNER / 100);
+            window.innerHeight * (BOTTOM_INNER / 100); // Adjusted
 
           const leftInnerThreshold = window.innerWidth * (LEFT_INNER / 100);
           const rightInnerThreshold = window.innerWidth * (RIGHT_INNER / 100);
@@ -171,30 +172,30 @@
           if (
             squareRect.left >= leftInnerThreshold &&
             squareRect.left <= rightInnerThreshold &&
-            squareRect.top >= bottomInnerThreshold &&
-            squareRect.top <= topInnerThreshold
+            squareRect.top <= bottomInnerThreshold &&
+            squareRect.top >= topInnerThreshold
           ) {
             positionText = 'inner';
           } else {
             // Determine the vertical position text based on thresholds
-            if (squareRect.top < bottomThreshold) {
+            if (squareRect.top > bottomThreshold) {
               positionText = 'bottom outer';
             } else if (
-              squareRect.top >= bottomThreshold &&
-              squareRect.top < lowThreshold
+              squareRect.top <= bottomThreshold &&
+              squareRect.top > lowerThreshold
             ) {
               positionText = 'low outer';
             } else if (
-              squareRect.top >= lowThreshold &&
-              squareRect.top < highThreshold
+              squareRect.top <= lowerThreshold &&
+              squareRect.top > upperThreshold
             ) {
               positionText = 'low outer';
             } else if (
-              squareRect.top >= highThreshold &&
-              squareRect.top < upperThreshold
+              squareRect.top <= topThreshold &&
+              squareRect.top > upperThreshold
             ) {
               positionText = 'high outer';
-            } else if (squareRect.top >= upperThreshold) {
+            } else if (squareRect.top <= upperThreshold) {
               positionText = 'upper outer';
             }
           }
