@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Red Square</title>
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #282c34; /* Dark background */
+    background-image: url('./adversary2.svg'); /* Add background image */
+    background-size: cover; /* Cover the entire page */
+    background-position: center; /* Center the background image */
+  }
+  .input-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+    padding: 10px 0; /* Some padding at the top and bottom */
+  }
+  @keyframes grow {
+  to {
+    width: 16.66%; /* Double the width */
+    height: 16.66vh; /* Double the height */
+    opacity: 0; /* Fade out */
+  }
+}
+
+.red-square {
+  position: absolute;
+  width: 8.33%;
+  height: 8.33vh;
+  background-color: #61dafb;
+  display: none;
+  opacity: 1; /* Ensure full opacity initially */
+  transition: opacity 0.5s ease; /* Smooth transition for fading out */
+}
+
+.grow-and-fade {
+  animation: grow 0.5s forwards; /* Use the grow animation and keep the final state */
+}
+</style>
+</head>
+<body>
+<div class="red-square"></div>
+<!-- Container for input elements -->
+<div class="input-container">
+  Min Time (seconds): <input type="number" id="minTimeInput" value="2.5">
+  Max Time (seconds): <input type="number" id="maxTimeInput" value="4">
+</div>
+<script>
+  const square = document.querySelector('.red-square');
+  
+  const TENTH_OF_SECOND = 100; // 1/10th of a second
+  let minimalTimeBetweenPunches = TENTH_OF_SECOND * 25; // Initially 2.5 seconds
+  let maximumTimeBetweenPunches = TENTH_OF_SECOND * 40; // Initially 4 seconds
+  let intervalID; // Store the interval ID for clearing
+
+  function moveSquare() {
+    const maxWidth = window.innerWidth - square.offsetWidth * 2; // Adjust for growth
+  const maxHeight = window.innerHeight - square.offsetHeight * 2; // Adjust for growth
+  const randomX = Math.random() * maxWidth;
+    const randomY = Math.random() * maxHeight;
+
+    square.style.left = `${randomX}px`;
+    square.style.top = `${randomY}px`;
+    square.style.display = 'block';
+  square.classList.remove('grow-and-fade'); // Reset the animation
+
+  setTimeout(() => {
+    square.classList.add('grow-and-fade'); // Start the grow and fade animation
+  }, 500); // After initial display time
+  }
+
+  function startMovingSquare() {
+    clearInterval(intervalID); // Clear existing interval
+    intervalID = setInterval(moveSquare, Math.random() * (maximumTimeBetweenPunches - minimalTimeBetweenPunches) + minimalTimeBetweenPunches);
+  }
+
+  document.getElementById('minTimeInput').addEventListener('change', function() {
+    minimalTimeBetweenPunches = TENTH_OF_SECOND * this.value * 10;
+    startMovingSquare(); // Restart with new min time
+  });
+
+  document.getElementById('maxTimeInput').addEventListener('change', function() {
+    maximumTimeBetweenPunches = TENTH_OF_SECOND * this.value * 10;
+    startMovingSquare(); // Restart with new max time
+  });
+
+  startMovingSquare(); // Initial call to start moving the square
+</script>
+</body>
+</html>

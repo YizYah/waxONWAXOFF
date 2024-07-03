@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<script>
+  
+</script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Red Square</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #fff;
+  }
+  .red-square {
+    position: absolute;
+    width: 8.33%; /* 1/12th of the screen width */
+    height: 8.33vh; /* 1/12th of the screen height */
+    background-color: red;
+    display: none; /* Initially hidden */
+  }
+</style>
+</head>
+<body>
+<div class="red-square"></div>
+<script>
+  const square = document.querySelector('.red-square');
+  
+  const TENTH_OF_SECOND = 100; // 1/10th of a second
+
+  // Constants for the time intervals
+  // SET THE TIME INTERVALS HERE
+  
+  let MINIMAL_TIME_BETWEEN_PUNCHES = TENTH_OF_SECOND * 25; // 2.5 seconds 
+  let MAXIMUM_TIME_BETWEEN_PUNCHES = TENTH_OF_SECOND * 40; // 4 seconds
+  let ADDITIONAL_MAX_TIME = MAXIMUM_TIME_BETWEEN_PUNCHES - MINIMAL_TIME_BETWEEN_PUNCHES;
+  const TIME_BEFORE_HIDING = 4 * TENTH_OF_SECOND; // 4/10th of a second
+
+  function startMovingSquare() {
+    if (intervalID) clearInterval(intervalID); // Clear existing interval
+    intervalID = setInterval(moveSquare, Math.random() * (maximumTimeBetweenPunches - minimalTimeBetweenPunches) + minimalTimeBetweenPunches);    
+}
+
+function updateMinTime() {
+  const minTime = parseFloat(document.getElementById('minTimeInput').value);
+  if (!isNaN(minTime) && minTime > 0) {
+    minimalTimeBetweenPunches = TENTH_OF_SECOND * minTime * 10;
+    startMovingSquare(); // Restart the interval with the new time
+    alert(`Minimal time updated to ${minTime} seconds.`);
+  } else {
+    alert('Please enter a valid number.');
+  }
+}
+
+function updateMaxTime() {
+  const maxTime = parseFloat(document.getElementById('maxTimeInput').value);
+  if (!isNaN(maxTime) && maxTime > 0) {
+    maximumTimeBetweenPunches = TENTH_OF_SECOND * maxTime * 10;
+    startMovingSquare(); // Restart the interval with the new time
+    alert(`Maximum time updated to ${maxTime} seconds.`);
+  } else {
+    alert('Please enter a valid number.');
+  }
+}
+// Initial call to start moving the square
+startMovingSquare();
+
+  function moveSquare() {
+    const maxWidth = window.innerWidth - square.offsetWidth;
+    const maxHeight = window.innerHeight - square.offsetHeight;
+    const randomX = Math.random() * maxWidth;
+    const randomY = Math.random() * maxHeight;
+
+    square.style.left = `${randomX}px`;
+    square.style.top = `${randomY}px`;
+    square.style.display = 'block';
+
+    setTimeout(() => {
+      square.style.display = 'none';
+    }, TIME_BEFORE_HIDING); // Hide after 1/2 second
+  }
+
+  setInterval(moveSquare, Math.random() * (MAXIMUM_TIME_BETWEEN_PUNCHES - MINIMAL_TIME_BETWEEN_PUNCHES) + MINIMAL_TIME_BETWEEN_PUNCHES); // Change location at random intervals between MINIMAL_TIME and (MINIMAL_TIME + ADDITIONAL_MAX_TIME)
+
+</script>
+<button onclick="document.getElementById('minTimeInput').style.display='block'">Min</button>
+<input id="minTimeInput" type="number" style="display:none" placeholder="Enter min seconds" onblur="updateMinTime()">
+
+<button onclick="document.getElementById('maxTimeInput').style.display='block'">Max</button>
+<input id="maxTimeInput" type="number" style="display:none" placeholder="Enter max seconds" onblur="updateMaxTime()">
+
+</body>
+</html>

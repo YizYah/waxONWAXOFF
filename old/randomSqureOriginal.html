@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<script>
+  
+</script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Red Square</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #fff;
+  }
+  .red-square {
+    position: absolute;
+    width: 8.33%; /* 1/12th of the screen width */
+    height: 8.33vh; /* 1/12th of the screen height */
+    background-color: red;
+    display: none; /* Initially hidden */
+  }
+</style>
+</head>
+<body>
+<div class="red-square"></div>
+<script>
+  const square = document.querySelector('.red-square');
+  
+  const TENTH_OF_SECOND = 100; // 1/10th of a second
+
+  // Constants for the time intervals
+  // SET THE TIME INTERVALS HERE
+  
+  const MINIMAL_TIME_BETWEEN_PUNCHES = TENTH_OF_SECOND * 25; // 1/2 second
+  const MAXIMUM_TIME_BETWEEN_PUNCHES = TENTH_OF_SECOND * 40; // 1.5 seconds
+  const ADDITIONAL_MAX_TIME = MAXIMUM_TIME_BETWEEN_PUNCHES - MINIMAL_TIME_BETWEEN_PUNCHES;
+  const TIME_BEFORE_HIDING = 4 * TENTH_OF_SECOND; // 4/10th of a second
+
+  
+
+  function moveSquare() {
+    const maxWidth = window.innerWidth - square.offsetWidth;
+    const maxHeight = window.innerHeight - square.offsetHeight;
+    const randomX = Math.random() * maxWidth;
+    const randomY = Math.random() * maxHeight;
+
+    square.style.left = `${randomX}px`;
+    square.style.top = `${randomY}px`;
+    square.style.display = 'block';
+
+    setTimeout(() => {
+      square.style.display = 'none';
+    }, TIME_BEFORE_HIDING); // Hide after 1/2 second
+  }
+
+  setInterval(moveSquare, Math.random() * ADDITIONAL_MAX_TIME + MINIMAL_TIME_BETWEEN_PUNCHES); // Change location at random intervals between MINIMAL_TIME and (MINIMAL_TIME + ADDITIONAL_MAX_TIME)
+
+</script>
+</body>
+</html>
