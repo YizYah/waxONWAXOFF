@@ -22,7 +22,7 @@
       /* Center the background image */
       background-repeat: no-repeat;
       /* Prevent the image from repeating */
-      I */
+
     }
 
     .input-container {
@@ -64,14 +64,24 @@
 
     .red-square {
       position: absolute;
-      width: 8.33%;
-      height: 8.33vh;
+      height: '90vh';
+      width: 60%;
+      margin: auto;
+      /* width: 8.33%; */
+      /* width: 30vw; */
+      /* height: 8.33vh; */
       background-color: #61dafb;
       display: none;
       opacity: 1;
       /* Ensure full opacity initially */
       transition: opacity 0.5s ease;
       /* Smooth transition for fading out */
+    }
+
+    #image {
+      /* width: 100%; */
+      width: 100%;
+      object-fit: contain;
     }
 
     .grow-and-fade {
@@ -92,7 +102,9 @@
 </head>
 
 <body>
-  <div class="red-square"></div>
+  <div class="red-square">
+    <img id="image" src="/public/LUpper.jpg" />
+  </div>
   <!-- Container for input elements -->
   <div class="input-container">
     Min Time (seconds):
@@ -126,6 +138,25 @@
     const leftInnerThreshold = window.innerWidth * (LEFT_INNER / 100);
     const rightInnerThreshold = window.innerWidth * (RIGHT_INNER / 100);
 
+    const images = [
+      '/public/LBottom.jpg',
+      '/public/LHigh.jpg',
+      '/public/LInnter.jpg',
+      '/public/LLow.jpg',
+      '/public/RBottom.jpg',
+      '/public/RHigh.jpg',
+      '/public/RHighOther.jpg',
+      '/public/RHighOther.jpg',
+      '/public/RInner.jpg',
+      '/public/RLow.jpg',
+      '/public/RUpper.jpg',
+    ]
+
+    const getRandomIndex = () => {
+      const min = 0;
+      const max = images.length - 1;
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    }
     // Assuming the existence of a function to update position text and variables for current horizontal and vertical positions
     function updatePositionText(horizontalPosition, verticalPosition) {
       let positionText = '';
@@ -180,24 +211,26 @@
 
     const square = document.querySelector('.red-square');
 
+
     const TENTH_OF_SECOND = 100; // 1/10th of a second
     let minimalTimeBetweenPunches = TENTH_OF_SECOND * 25; // Initially 2.5 seconds
     let maximumTimeBetweenPunches = TENTH_OF_SECOND * 40; // Initially 4 seconds
     let intervalID; // Store the interval ID for clearing
+    const image = document.getElementById('image');
 
     function moveSquare() {
       const maxWidth = window.innerWidth - square.offsetWidth * 2; // Adjust for growth
       const maxHeight = window.innerHeight - square.offsetHeight * 2; // Adjust for growth
       const randomX = Math.random() * maxWidth;
       const randomY = Math.random() * maxHeight;
-
-      square.style.left = `${randomX}px`;
-      square.style.top = `${randomY}px`;
+      image.setAttribute('src', images[getRandomIndex()]);
+      // square.style.left = `${randomX}px`;
+      // square.style.top = `${randomY}px`;
       square.style.display = 'block';
       square.classList.remove('grow-and-fade'); // Reset the animation
 
       setTimeout(() => {
-        square.classList.add('grow-and-fade'); // Start the grow and fade animation
+        // square.classList.add('grow-and-fade'); // Start the grow and fade animation
 
         // Determine the location of the square and display "upper left", "upper right", "lower left", or "lower right"
         const squareRect = square.getBoundingClientRect();
@@ -245,6 +278,7 @@
           positionText += ' right';
         }
 
+        // image.removeAttribute('src');
         // displayPositionText(positionText);
       }, 500); // After initial display time
     }
