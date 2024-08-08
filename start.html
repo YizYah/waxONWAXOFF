@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Random Red Square</title>
+  <title>Random Hits</title>
   <style>
     body {
       margin: 0;
@@ -53,9 +53,9 @@
 
     @keyframes grow {
       to {
-        width: 16.66%;
+        /* width: 16.66%; */
         /* Double the width */
-        height: 16.66vh;
+        /* height: 16.66vh; */
         /* Double the height */
         opacity: 0;
         /* Fade out */
@@ -63,24 +63,29 @@
     }
 
     .red-square {
-      position: absolute;
-      height: '90vh';
-      width: 60%;
+      /* position: absolute; */
+      /* height: '95vh'; */
+      /* width: 60%; */
       margin: auto;
+      margin-bottom: 100px;
       /* width: 8.33%; */
       /* width: 30vw; */
       /* height: 8.33vh; */
       background-color: #282C34;
-      display: none;
+      /* background-color: #1250cb; */
+      /* display: none; */
       opacity: 1;
+      /* height: 85vh; */
+
       /* Ensure full opacity initially */
-      transition: opacity 0.5s ease;
+      /* transition: opacity 0.5s ease; */
       /* Smooth transition for fading out */
     }
 
     #image {
       /* width: 100%; */
-      width: 100%;
+      width: 880px;
+      height: auto;
       object-fit: contain;
     }
 
@@ -103,7 +108,7 @@
 
 <body>
   <div class="red-square">
-    <img id="image" src="/public/LUpper.jpg" />
+    <img id="image" src="public/RBottom.png" />
   </div>
   <!-- Container for input elements -->
   <div class="input-container">
@@ -139,17 +144,17 @@
     const rightInnerThreshold = window.innerWidth * (RIGHT_INNER / 100);
 
     const images = [
-      '/public/LBottom.png',
-      '/public/LInnter.png',
-      '/public/LUpper.png',
-      '/public/RHighOther.png',
-      '/public/RInner.png',
-      '/public/RUpper.png',
-      '/public/LHigh.png',
-      '/public/LLow.png',
-      '/public/RBottom.png',
-      '/public/RHigh.png',
-      '/public/RLow.png'
+      'public/LBottom.png',
+      'public/LInnter.png',
+      'public/LUpper.png',
+      'public/RHighOther.png',
+      'public/RInner.png',
+      'public/RUpper.png',
+      'public/LHigh.png',
+      'public/LLow.png',
+      'public/RBottom.png',
+      'public/RHigh.png',
+      'public/RLow.png'
     ]
 
     const getRandomIndex = () => {
@@ -213,7 +218,7 @@
 
 
     const TENTH_OF_SECOND = 100; // 1/10th of a second
-    let minimalTimeBetweenPunches = TENTH_OF_SECOND * 25; // Initially 2.5 seconds
+    let minimalTimeBetweenPunches = TENTH_OF_SECOND * 25; // Initially 1 seconds
     let maximumTimeBetweenPunches = TENTH_OF_SECOND * 40; // Initially 4 seconds
     let intervalID; // Store the interval ID for clearing
     const image = document.getElementById('image');
@@ -224,10 +229,11 @@
       const randomX = Math.random() * maxWidth;
       const randomY = Math.random() * maxHeight;
       image.setAttribute('src', images[getRandomIndex()]);
+      // image.setAttribute('src', 'public/RBottom.png');
       // square.style.left = `${randomX}px`;
       // square.style.top = `${randomY}px`;
-      square.style.display = 'block';
-      square.classList.remove('grow-and-fade'); // Reset the animation
+      // square.style.display = 'block';
+      // square.classList.remove('grow-and-fade'); // Reset the animation
 
       setTimeout(() => {
         // square.classList.add('grow-and-fade'); // Start the grow and fade animation
